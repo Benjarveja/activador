@@ -1,7 +1,7 @@
 // URL DEL BACKEND PROXY
 // Para desarrollo local debe ser 'http://localhost:3000/api/generate'
 // Para producción se cambiará por la URL de Render/Railway
-const API_URL = 'http://localhost:3000/api/generate';
+const API_URL = 'https://activador.onrender.com/api/generate';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('activationForm');
