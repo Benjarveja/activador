@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activación | Proxy Automático</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 class="card-title">Obtener Activación</h1>
+            
+            <form id="activationForm">
+                <div class="input-group">
+                    <label for="order">Número de Pedido</label>
+                    <input type="text" id="order" name="order" placeholder="Ej: 136209" autocomplete="off" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="install">Installation ID</label>
+                    <input type="text" id="install" name="install" placeholder="Ej: 3672893 2576660 9311656 ..." autocomplete="off" required>
+                </div>
+
+                <button type="submit" id="submitBtn">
+                    <span id="btnText">Obtener ID de Confirmación</span>
+                    <span id="btnSpinner" class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <div id="errorBox" class="message error hidden"></div>
+            
+            <div id="resultContainer" class="result-container hidden">
+                <h2 class="result-title">ID de Confirmación</h2>
+                <div id="cidBlocks" class="cid-grid">
+                    <!-- Los bloques se llenarán mediante JavaScript -->
+                </div>
+                
+                <button type="button" id="copyBtn" class="btn-secondary">Copiar</button>
+                <div id="copyFeedback" class="message success hidden">Copiado correctamente.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
