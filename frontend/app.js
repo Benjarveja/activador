@@ -24,14 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = e.target.value.replace(/[^\d]/g, '');
     });
 
-    // Filtrar y Limpiar Input del Installation ID
+    // Filtrar, Limpiar y Formatear Input del Installation ID (separar cada 7 digitos)
     installInput.addEventListener('input', (e) => {
-        let val = e.target.value;
-        // Solo permitir números y espacios, quitar todo lo demas (incluyendo tabs y saltos)
-        val = val.replace(/[^\d\s]/g, '');
-        // Reemplazar saltos de linea y tabs por espacio, luego colapsar multiples espacios
-        val = val.replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ');
-        e.target.value = val;
+        // Eliminar todo lo que no sea dígito
+        let rawDigits = e.target.value.replace(/\D/g, '');
+        // Separar en bloques de 7 números
+        let formatted = rawDigits.match(/.{1,7}/g)?.join(' ') || '';
+        e.target.value = formatted;
     });
 
     form.addEventListener('submit', async (e) => {
