@@ -34,6 +34,9 @@ Crea un archivo `.env` en la carpeta `backend/`:
 PORT=3000
 REMOTE_URL=https://softpro.cl/activacion-telefonica/
 FRONTEND_URL=https://tu-frontend-en-vercel.vercel.app
+TURNSTILE_SITEKEY=0x4AAAAAAE6dCbWx9-ifZ3dD
+TURNSTILE_SOLVER_URL=http://127.0.0.1:8191/solve
+TURNSTILE_TIMEOUT=45
 ```
 *(Asegúrate de no agregar `/` al final de front-end URL si estás configurando CORS restrictivo).*
 
@@ -53,6 +56,13 @@ Para probarlo en tu máquina:
    ```
 4. Instala un servidor local para el frontend, por ejemplo [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) en VS Code, y abre `frontend/index.html`. 
 5. Asegúrate de que `FRONTEND_URL` en el backend `.env` coincida con el puerto de tu Live Server (ej. `http://localhost:5500`).
+6. En otra terminal, instala la dependencia y levanta EzSolver:
+   ```bash
+   cd EzSolver-main
+   pip install nodriver
+   python service.py
+   ```
+   Debes tener Google Chrome instalado. El backend Node consultará este servicio en `TURNSTILE_SOLVER_URL`.
 
 ## 🛡️ Seguridad y Buenas Prácticas Involucradas
 

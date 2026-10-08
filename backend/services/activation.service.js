@@ -5,9 +5,13 @@ require('dotenv').config();
 const { getRandomUserAgent } = require('../utils/userAgent');
 
 const requestCID = async (order, install) => {
-    // Configurar instancia base para mantener un timeout
+    const solverUrl = process.env.TURNSTILE_SOLVER_URL || 'http://127.0.0.1:8191/solve';
+    const sitekey = process.env.TURNSTILE_SITEKEY || '0x4AAAAAAE6dCbWx9-ifZ3dD';
+    const solverTimeout = Number(process.env.TURNSTILE_TIMEOUT || 45);
+
+    // El solver puede tardar hasta el timeout configurado más el margen de red.
     const httpClient = axios.create({
-        timeout: 15000, 
+        timeout: (solverTimeout + 20) * 1000,
     });
 
     const baserUrl = process.env.REMOTE_URL;
@@ -57,14 +61,35 @@ const requestCID = async (order, install) => {
         throw new Error('No fue posible obtener el nonce.');
     }
 
-    // 2. ENVIAR FORMULARIO POST AL ADMIN-AJAX
+    // 2. Obtener el token de Turnstile usando la misma página remota como origen.
+    let turnstileToken;
+    try {
+        const solverResponse = await httpClient.post(solverUrl, {
+            sitekey,
+            siteurl: baserUrl,
+            timeout: solverTimeout,
+        }, {
+            timeout: (solverTimeout + 20) * 1000,
+        });
+
+        turnstileToken = solverResponse.data && solverResponse.data.token;
+    } catch (err) {
+        throw new Error(`No fue posible completar la verificación Turnstile: ${err.message}`);
+    }
+
+    if (!turnstileToken) {
+        throw new Error('El solver Turnstile no devolvió un token válido.');
+    }
+
+    // 3. ENVIAR FORMULARIO POST AL ADMIN-AJAX
     const postUrl = new URL('/wp-admin/admin-ajax.php', new URL(baserUrl).origin).href;
     
     const formData = new URLSearchParams();
-    formData.append('action', 'softpro_cid_get');
+    formData.append('action', 'spcid_safe_get');
     formData.append('order', order);
     formData.append('install', install);
     formData.append('nonce', nonce);
+    formData.append('turnstile_token', turnstileToken);
 
     const headersPost = {
         ...headersGet,
