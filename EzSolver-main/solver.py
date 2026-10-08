@@ -72,6 +72,7 @@ async def _solve(sitekey: str, siteurl: str, timeout: int) -> str:
     browser = await uc.start(
         browser_executable_path=_find_chrome(),
         headless=False,
+        no_sandbox=True,
         user_data_dir=_get_profile_dir(),
     )
 
